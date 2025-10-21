@@ -1,0 +1,20 @@
+{
+  "name": "hwitzthum-skills-marketplace",
+  "version": "1.0.0",
+  "description": "A collection of custom skills for specific workflows",
+  "owner": {
+    "name": "Harry Witzthum",
+    "email": "hwitzthum@caritas.ch",
+    "url": "https://github.com/hwitzthum/hwitzthum-skills-marketplace.git"
+  },
+  "plugins": [
+    {
+      "name": "documentation-generation-pro",
+      "source": "./api-documentation",
+      "description": "Comprehensive documentation generation skill for creating API docs, architecture diagrams, onboarding guides, and interactive tutorials from codebases. Use when users request documentation, guides, README files, API references, or architectural documentation for their projects.",
+      "version": "1.0.0",
+      "category": "documentation",
+      "tags": ["API", "documentation", "diagrams"]
+    }
+  ]
+}
