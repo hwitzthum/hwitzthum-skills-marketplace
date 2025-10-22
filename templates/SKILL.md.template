@@ -1,0 +1,89 @@
+---
+name: your-skill-name
+description: A clear, concise description of what this skill does and when Claude should use it. Be specific! (Max 200 characters)
+---
+
+# Your Skill Name
+
+Brief one-sentence description of what this skill does.
+
+## Overview
+
+Provide a clear overview of:
+- What problem this skill solves
+- When it should be used
+- What makes it valuable
+
+## When to Use This Skill
+
+Be explicit about the scenarios where Claude should invoke this skill:
+- Scenario 1
+- Scenario 2
+- Scenario 3
+
+## Instructions
+
+Provide clear, step-by-step instructions for Claude:
+
+### Step 1: [First Action]
+
+Describe what Claude should do first.
+
+```bash
+# Example commands if applicable
+command --option value
+```
+
+### Step 2: [Second Action]
+
+Continue with subsequent steps.
+
+### Step 3: [Final Action]
+
+Conclude with final steps.
+
+## Examples
+
+### Example 1: [Scenario Name]
+
+**User Request:**
+"Example user request that would trigger this skill"
+
+**Expected Behavior:**
+1. Claude does X
+2. Claude does Y
+3. Result is Z
+
+### Example 2: [Another Scenario]
+
+Provide multiple concrete examples.
+
+## Best Practices
+
+- Best practice 1
+- Best practice 2
+- Best practice 3
+
+## Resources
+
+If this skill uses additional files, reference them here:
+
+- `scripts/helper.py` - Purpose of this script
+- `templates/template.md` - Purpose of this template
+- `references/guide.md` - Additional reference material
+
+## Troubleshooting
+
+Common issues and solutions:
+
+### Issue 1
+**Problem:** Description
+**Solution:** How to resolve
+
+### Issue 2
+**Problem:** Description
+**Solution:** How to resolve
+
+## Version History
+
+- v1.0.0 (YYYY-MM-DD): Initial release

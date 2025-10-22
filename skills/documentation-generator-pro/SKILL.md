@@ -1,6 +1,6 @@
 ---
 name: documentation-generator-pro
-description: Comprehensive documentation generation skill for creating API docs, architecture diagrams, onboarding guides, and interactive tutorials from codebases. Use when users request documentation, guides, README files, API references, or architectural documentation for their projects.
+description: Generate API docs, architecture diagrams, onboarding guides, and tutorials from codebases. Use for documentation, README files, or architectural docs.
 ---
 
 # Documentation Generator Pro
