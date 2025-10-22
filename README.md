@@ -60,7 +60,8 @@ hwitzthum-skills-marketplace/
     ├── .claude-plugin/
     │   └── plugin.json           # Plugin metadata
     ├── skills/
-    │   └── SKILL.md              # Skill definition
+    │   └── documentation-generator-pro/  # Skill folder
+    │       └── SKILL.md          # Skill definition
     ├── assets/
     │   └── templates/            # Documentation templates
     ├── references/               # Reference materials
@@ -85,7 +86,8 @@ plugin-name/
 ├── .claude-plugin/
 │   └── plugin.json          # Required: Plugin metadata
 ├── skills/                   # Skills directory
-│   └── SKILL.md             # Skill definition(s)
+│   └── my-skill/            # Each skill in its own folder
+│       └── SKILL.md         # Skill definition
 ├── commands/                 # Optional: Custom slash commands
 ├── agents/                   # Optional: Custom agents
 └── hooks/                    # Optional: Event handlers
@@ -117,9 +119,10 @@ Detailed documentation about the skill...
 
 ### Skills Not Available
 
-1. Ensure the SKILL.md file is in the `skills/` subdirectory
-2. Verify the frontmatter in SKILL.md is properly formatted
-3. Restart Claude Code after making changes
+1. Ensure the SKILL.md file is in a subdirectory within `skills/` (e.g., `skills/my-skill/SKILL.md`)
+2. Each skill must have its own folder inside the `skills/` directory
+3. Verify the frontmatter in SKILL.md is properly formatted
+4. Restart Claude Code after making changes
 
 ## Contributing
 
