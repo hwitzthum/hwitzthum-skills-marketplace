@@ -76,7 +76,7 @@ Use subagents to generate different documentation types simultaneously:
 
 ## Documentation Templates
 
-Use the templates in `assets/templates/` for consistent documentation:
+Use the templates in `templates/` for consistent documentation:
 
 - `API_TEMPLATE.md` - Standard API documentation format
 - `ARCHITECTURE_TEMPLATE.md` - System architecture documentation
@@ -161,7 +161,7 @@ Comprehensive onboarding guides should include:
 7. **Troubleshooting**: Common issues and solutions
 8. **Resources**: Links to additional documentation
 
-See `assets/templates/ONBOARDING_TEMPLATE.md` for full template.
+See `templates/ONBOARDING_TEMPLATE.md` for full template.
 
 ## Interactive Tutorial Generation
 
