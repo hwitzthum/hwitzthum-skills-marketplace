@@ -91,7 +91,10 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# IMPORTANT: Use bcrypt 4.0.1 for compatibility with passlib 1.7.4
+# See "Password Hashing Best Practices" section below for details
 
 # Models
 class Token(BaseModel):
@@ -381,6 +384,125 @@ async def callback(code: str, state: str, request: Request):
 9. **Missing CSRF protection** - Use state parameter or PKCE
 10. **Not implementing rate limiting** - Prevent brute force attacks
 
+## Password Hashing Best Practices
+
+### Bcrypt Version Compatibility (CRITICAL)
+
+**Issue**: bcrypt version 5.0+ has stricter validation that causes compatibility issues with passlib 1.7.4.
+
+**Solution**: Pin bcrypt to version 4.0.1 in your requirements.txt
+
+```txt
+# requirements.txt
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-jose[cryptography]>=3.3.0
+passlib>=1.7.4
+bcrypt==4.0.1  # CRITICAL: Pin to 4.0.1 for passlib compatibility
+python-multipart>=0.0.12
+pydantic[email]>=2.11.0
+python-dotenv>=1.1.0
+```
+
+### Handling Bcrypt 72-Byte Limit
+
+Bcrypt has a maximum password length of 72 bytes. Always truncate passwords before hashing:
+
+```python
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+class AuthService:
+    @staticmethod
+    def hash_password(password: str) -> str:
+        """
+        Hash a password using bcrypt
+
+        Note: Bcrypt has a maximum password length of 72 bytes.
+        Passwords are truncated to 72 bytes if longer.
+        """
+        # Truncate password to 72 bytes (bcrypt limitation)
+        password_bytes = password.encode('utf-8')[:72]
+        return pwd_context.hash(password_bytes.decode('utf-8'))
+
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        """
+        Verify a password against its hash
+
+        Note: Password is truncated to 72 bytes to match bcrypt behavior
+        """
+        # Truncate password to 72 bytes (bcrypt limitation)
+        password_bytes = plain_password.encode('utf-8')[:72]
+        return pwd_context.verify(password_bytes.decode('utf-8'), hashed_password)
+```
+
+### Common Bcrypt Errors and Solutions
+
+**Error**: `ValueError: password cannot be longer than 72 bytes`
+```python
+# ❌ WRONG - Will fail with long passwords
+pwd_context.hash(password)
+
+# ✅ CORRECT - Truncate to 72 bytes
+password_bytes = password.encode('utf-8')[:72]
+pwd_context.hash(password_bytes.decode('utf-8'))
+```
+
+**Error**: `AttributeError: module 'bcrypt' has no attribute '__about__'`
+```bash
+# Solution: Downgrade bcrypt to 4.0.1
+pip uninstall -y bcrypt
+pip install bcrypt==4.0.1
+```
+
+### Alternative: Argon2 (Recommended for New Projects)
+
+For new projects, consider Argon2 instead of bcrypt (no 72-byte limit):
+
+```python
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+# Argon2 doesn't have the 72-byte limitation
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)  # No truncation needed
+```
+
+**Dependencies for Argon2**:
+```txt
+passlib[argon2]>=1.7.4
+argon2-cffi>=21.3.0
+```
+
+### Password Strength Validation
+
+Always validate password strength before hashing:
+
+```python
+from pydantic import BaseModel, field_validator
+import re
+
+class UserRegistration(BaseModel):
+    username: str
+    password: str
+
+    @field_validator('password')
+    @classmethod
+    def validate_password_strength(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        if not re.search(r'[A-Z]', v):
+            raise ValueError('Password must contain at least one uppercase letter')
+        if not re.search(r'[a-z]', v):
+            raise ValueError('Password must contain at least one lowercase letter')
+        if not re.search(r'\d', v):
+            raise ValueError('Password must contain at least one digit')
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', v):
+            raise ValueError('Password must contain at least one special character')
+        return v
+```
+
 ## Configuration Examples
 
 ### Auth0 Configuration
@@ -438,6 +560,12 @@ Available in `scripts/` directory:
 - Check cookie configuration (httpOnly, secure, SameSite)
 - Verify session middleware is enabled
 - Check cookie domain and path settings
+
+**Password hashing errors (bcrypt)**
+- `ValueError: password cannot be longer than 72 bytes` → Truncate password to 72 bytes before hashing
+- `AttributeError: module 'bcrypt' has no attribute '__about__'` → Downgrade to bcrypt==4.0.1
+- Always use consistent truncation in both hash_password() and verify_password()
+- See "Password Hashing Best Practices" section for complete solution
 
 ## Additional Resources
 
